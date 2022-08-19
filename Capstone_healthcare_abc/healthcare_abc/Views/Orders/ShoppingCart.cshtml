@@ -1,0 +1,64 @@
+﻿@using E_Healthcare_CapstoneProject_LMS.Data.ViewModels;
+@model ShoppingCartVM
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+
+    var CartItems = Model.ShoppingCart.GetShoppingCartItems();
+    var count = CartItems.Count;
+    string visibility = "visible";
+    @if (count == 0) { visibility = "hidden"; }
+}
+<div class="row">
+    @*<Summary>*@
+    @if (TempData["Error"] != null)
+    {
+        <div class="col-md-12 alert alert-danger text-center h4"><i class="bi bi-shield-lock-fill"></i> @TempData["Error"]</div>
+    }
+    @if (count == 0 && TempData["Error"] == null)
+    {<div class="col-md-12 alert alert-warning text-center h4"><i class="bi bi-cart-x-fill"></i> Cart is empty !!</div>} @* Code lines QA & Secutiry  MSH <Summary/>*@
+    <div class="col-md-8 offset-2">
+        <table class="table" style="visibility:@visibility">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>MRP</th>
+                    <th>quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var Item in Model.ShoppingCart.ShoppingCartItems)
+                {
+                    <tr>
+
+                        <td class="align-middle"><img class="img-rounded" src="~/Images/Items/@(Item.Medicine.ImageCode).png" alt="@Item.Medicine.Name" style="max-width:60px" /></td>
+                        <td class="align-middle">@Item.Medicine.Name</td>
+                        <td class="align-middle">@Item.Medicine.Price.ToString("c")</td>
+                        <td class="align-middle">@Item.Amount</td>
+                        <td class="align-middle">@((Item.Medicine.Price * Item.Amount).ToString("c"))</td> <!--SubTotal-->
+                        <td>
+                            <a class="btn alert-danger" asp-controller="Orders" asp-action="RemoveItemFromShoppingCart" asp-route-id="@Item.Medicine.ID">
+                                <i class="bi bi-cart-dash"></i>
+                            </a>
+                            <!---->
+                            <a class="btn alert-success" asp-controller="Orders" asp-action="AddItemToShoppingCart" asp-route-id="@Item.Medicine.ID">
+                                <i class="bi bi-cart-plus"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+           
+        </table>
+        <br />
+        <div class="float-right col-md-4 col-xs-6">
+            @if (count != 0)
+            {<a class="btn btn-outline-success" asp-action="CompleteOrder">Checkout <i class="bi bi-arrow-right-square-fill"></i></a>}
+        </div>
+        <a class="btn btn-outline-info" asp-controller="Medicines" asp-action="Index"><i class="bi bi-arrow-left-square-fill"> Add more items</i></a>
+    </div>
+</div>
+

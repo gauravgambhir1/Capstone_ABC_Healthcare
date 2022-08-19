@@ -1,0 +1,35 @@
+﻿@using E_Healthcare_CapstoneProject_LMS.Data.ViewModels;
+@model LoginVM
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-3" >
+       
+        @if (TempData["Error"] != null)
+        {
+            <div class="col-md-12 alert alert-danger"><span><b>Sorry!</b> - @TempData["Error"]</span></div>
+        }
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <form asp-action="Login">                                     @*// forms by default perform request post*@
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <div class="form-group">
+                        <label asp-for="EmailAddress" class="control-label"></label><br />
+                        <input asp-for="EmailAddress" class="form-control" />
+                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label><br />
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Sign in" class="btn btn-outline-success float-right" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
